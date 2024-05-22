@@ -1,0 +1,29 @@
+
+; These compile instructions are for binary package build time.
+; End-user slm packages will not have this include file.
+
+; compile simple-websockets-server.c into a shared library
+compile flag "-lstz-websockets-server" :
+  on-platform :
+    linux :
+      "mkdir -p '{.}/lib'"
+      "cc -fPIC -rdynamic -shared -DPLATFORM_LINUX '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-server.c' -o '{.}/lib/libstz-websockets-server.dylib'"
+    os-x :
+      "mkdir -p '{.}/lib'"
+      "cc -fPIC -rdynamic -shared -DPLATFORM_OS_X '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-server.c' -o '{.}/lib/libstz-websockets-server.dylib'"
+    windows :
+      "mkdir {.}\\lib"
+      "gcc -Wl,--export-all-symbols -shared -DPLATFORM_WINDOWS '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-server.c' -o '{.}/lib/libstz-websockets-server.dll'"
+
+; compile simple-websockets-client.c into a shared library
+compile flag "-lstz-websockets-client" :
+  on-platform :
+    linux :
+      "mkdir -p '{.}/lib'"
+      "cc -fPIC -rdynamic -shared -DPLATFORM_LINUX '-I{STANZA_DIR}/include'-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-client.c' -o '{.}/lib/libstz-websockets-client.so'"
+    os-x :
+      "mkdir -p '{.}/lib'"
+      "cc -fPIC -rdynamic -shared -DPLATFORM_OS_X '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-client.c' -o '{.}/lib/libstz-websockets-client.dylib'"
+    windows :
+      "mkdir {.}\\lib"
+      "gcc -Wl,--export-all-symbols -shared -DPLATFORM_WINDOWS '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-client.c' -o '{.}/lib/libstz-websockets-client.dll'"

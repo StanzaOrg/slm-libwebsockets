@@ -1,0 +1,96 @@
+defpackage websockets-server :
+  import core
+  import collections
+
+public :
+  lostanza deftype ClientInterface :
+    pss: ptr<?>
+
+  deftype WebsocketServer
+  defmulti established (server: WebsocketServer, ci: ClientInterface) -> WebsocketClient
+  deftype WebsocketClient
+  defmulti closed (client: WebsocketClient) -> False
+  defmulti writable (client: WebsocketClient) -> False
+  defmulti receive (client: WebsocketClient, text: String) -> False
+
+
+protected lostanza deftype ServerInstance :
+  context: ptr<?>
+  interface: ref<WebsocketServer>
+
+lostanza deftype ClientInstance :
+  pss: ptr<?>
+  interface: ref<WebsocketClient>
+
+extern swss_create : (
+  int
+  ptr<((int, ptr<?>) -> int)>
+  ptr<((int, int) -> int)>
+  ptr<((int, int, ptr<byte>, int) -> int)>
+  ptr<((int, int) -> int)>
+) -> ptr<?>
+extern swss_port : (ptr<?>) -> int
+extern swss_refid : (ptr<?>, int) -> int
+extern swss_serve : (ptr<?>, int) -> int
+extern swss_destroy : (ptr<?>) -> int
+extern swss_sending : (ptr<?>) -> int
+extern swss_write : (ptr<?>, ptr<byte>, int) -> int
+
+public :
+  lostanza defn swss-create-server (server: ref<WebsocketServer>, port: ref<Int>) -> ref<ServerInstance|False> :
+    val swss-context = call-c swss_create(
+      port.value
+      addr(swss_established)
+      addr(swss_closed)
+      addr(swss_receive)
+      addr(swss_writable)
+    )
+    if swss-context == null :
+      return false
+    val swss = new ServerInstance{swss-context, server}
+    call-c swss_refid(swss-context, box-object(swss))
+    return swss
+
+  lostanza defn swss-port (si: ref<ServerInstance>) -> ref<Int>:
+    return new Int{call-c swss_port(si.context)}
+
+  lostanza defn swss-serve (swss: ref<ServerInstance>, idle-time: ref<Int>) -> ref<True|False> :
+    val r = call-c swss_serve(swss.context, idle-time.value)
+    if r < 0 : return false
+    return true
+
+  lostanza defn swss-destroy (swss: ref<ServerInstance>) -> ref<False> :
+    call-c swss_destroy(swss.context)
+    return false
+
+  lostanza defn swss-sending (ci: ref<ClientInterface>) -> ref<False> :
+    call-c swss_sending(ci.pss)
+    return false
+
+  lostanza defn swss-write (ci: ref<ClientInterface>, text: ref<String>) -> ref<False> :
+    call-c swss_write(ci.pss, addr!(text.chars), length(text).value)
+    return false
+
+extern defn swss_established (ref-id: int, pss: ptr<?>) -> int :
+  val swss = boxed-object(ref-id) as ref<ServerInstance>
+  val ci = new ClientInterface{pss}
+  val cl = new ClientInstance{pss, established(swss.interface, ci)}
+  return box-object(cl)
+
+extern defn swss_closed (ref-id: int, con-id: int) -> int :
+  ; val swss = boxed-object(ref-id) as ref<ServerInstance>
+  val cl = boxed-object(con-id) as ref<ClientInstance>
+  closed(cl.interface)
+  return 0
+
+extern defn swss_receive (ref-id: int, con-id: int, text: ptr<byte>, len: int) -> int :
+  ; val swss = boxed-object(ref-id) as ref<ServerInstance>
+  val cl = boxed-object(con-id) as ref<ClientInstance>
+  receive(cl.interface, String(len, text))
+  return 0
+
+extern defn swss_writable (ref-id: int, con-id: int) -> int :
+  ; val swss = boxed-object(ref-id) as ref<ServerInstance>
+  val cl = boxed-object(con-id) as ref<ClientInstance>
+  writable(cl.interface)
+  return 0

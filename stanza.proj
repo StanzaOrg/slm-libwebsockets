@@ -1,0 +1,40 @@
+include? ".slm/stanza.proj"
+pkg-cache: ".slm/pkg-cache"
+
+package websockets-server defined-in "src/websockets-server.stanza"
+package websockets-server requires :
+  ccfiles : "src/simple-ws-server.c"
+  ccflags :
+    (
+      "-I{.}/.slm/deps/libwebsockets/include"
+      "-L{.}/.slm/deps/libwebsockets/lib"
+      "-L{.}/lib"
+      "-lwebsockets"
+      "-lstz-websockets-server"
+      "-Wl,-rpath,{.}/.slm/deps/libwebsockets/lib"
+    )
+
+package websockets-client defined-in "src/websockets-client.stanza"
+package websockets-client requires :
+  ccfiles : "src/simple-ws-client.c"
+  ccflags :
+    (
+      "-I{.}/.slm/deps/libwebsockets/include"
+      "-L{.}/.slm/deps/libwebsockets/lib"
+      "-L{.}/lib"
+      "-lwebsockets"
+      "-lstz-websockets-client"
+      "-Wl,-rpath,{.}/.slm/deps/libwebsockets/lib"
+    )
+
+; This include file will only exist in the git repo at binary package build time.
+; End-user slm packages will not have this include file.
+include? "stanza-library.proj"
+
+package ws-test defined-in "test.stanza"
+
+build main :
+  inputs:
+    websockets-client
+    websockets-server 
+  pkg: ".slm/pkgs"
