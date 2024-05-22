@@ -1,8 +1,8 @@
 include? ".slm/stanza.proj"
 pkg-cache: ".slm/pkg-cache"
 
-package websockets-server defined-in "src/websockets-server.stanza"
-package websockets-server requires :
+package libwebsockets-server defined-in "src/libwebsockets-server.stanza"
+package libwebsockets-server requires :
   ccfiles : "src/simple-ws-server.c"
   ccflags :
     (
@@ -14,8 +14,8 @@ package websockets-server requires :
       "-Wl,-rpath,{.}/.slm/deps/libwebsockets/lib"
     )
 
-package websockets-client defined-in "src/websockets-client.stanza"
-package websockets-client requires :
+package libwebsockets-client defined-in "src/libwebsockets-client.stanza"
+package libwebsockets-client requires :
   ccfiles : "src/simple-ws-client.c"
   ccflags :
     (
@@ -31,10 +31,16 @@ package websockets-client requires :
 ; End-user slm packages will not have this include file.
 include? "stanza-library.proj"
 
-package ws-test defined-in "test.stanza"
+packages libwebsockets/* defined-in "src/libwebsockets"
 
 build main :
   inputs:
     websockets-client
     websockets-server 
   pkg: ".slm/pkgs"
+
+build test :
+  inputs:
+    libwebsockets/tests
+  pkg: ".slm/pkgs"
+  o: "libwebsockets-tests"

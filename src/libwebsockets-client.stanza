@@ -1,4 +1,4 @@
-defpackage websockets-client :
+defpackage libwebsockets-client :
   import core
   import collections
 

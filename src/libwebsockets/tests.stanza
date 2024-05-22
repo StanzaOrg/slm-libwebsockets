@@ -1,0 +1,37 @@
+defpackage libwebsockets/tests :
+  import core
+  import libwebsockets-client with: 
+    prefix(WebsocketServer,WebsocketClient) => C
+  import libwebsockets-server with:
+    prefix(WebsocketServer,WebsocketClient) => S
+
+
+defn Server () :
+  var swss
+  swss = swss-create-server{_, 8000} $
+    new SWebsocketServer :
+      defmethod established (this, ci)  :
+        println("Server established")
+        new SWebsocketClient :
+          defmethod closed (this) : false
+          defmethod writable (this) : false
+          defmethod receive (this, text) : false
+  match(swss:libwebsockets-server/ServerInstance) :
+    println("Server created")
+
+defn Client () :
+  var swsc
+  swsc = swsc-create-client{_, 8000} $
+    new CWebsocketClient :
+      defmethod established (this, si) :
+        println("Client established")
+        new CWebsocketServer :
+          defmethod closed (this) : false
+          defmethod writable (this) : false
+          defmethod receive (this, text) : false
+  match(swsc:libwebsockets-client/ClientInstance) :
+    println("Client created")
+
+
+Server()
+Client()
