@@ -1,3 +1,5 @@
 .slm
 *.tgz
 lib/
+libwebsockets-tests
+
