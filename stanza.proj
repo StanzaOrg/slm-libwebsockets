@@ -35,8 +35,8 @@ packages libwebsockets/* defined-in "src/libwebsockets"
 
 build main :
   inputs:
-    websockets-client
-    websockets-server 
+    libwebsockets-client
+    libwebsockets-server 
   pkg: ".slm/pkgs"
 
 build test :
