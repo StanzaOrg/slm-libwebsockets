@@ -7,7 +7,7 @@ compile flag "-lstz-websockets-server" :
   on-platform :
     linux :
       "mkdir -p '{.}/lib'"
-      "cc -fPIC -rdynamic -shared -DPLATFORM_LINUX '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-server.c' -o '{.}/lib/libstz-websockets-server.dylib'"
+      "cc -fPIC -rdynamic -shared -DPLATFORM_LINUX '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-server.c' -o '{.}/lib/libstz-websockets-server.so'"
     os-x :
       "mkdir -p '{.}/lib'"
       "cc -fPIC -rdynamic -shared -DPLATFORM_OS_X '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-server.c' -o '{.}/lib/libstz-websockets-server.dylib'"
