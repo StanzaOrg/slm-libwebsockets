@@ -20,7 +20,7 @@ compile flag "-lstz-websockets-client" :
   on-platform :
     linux :
       "mkdir -p '{.}/lib'"
-      "cc -fPIC -rdynamic -shared -DPLATFORM_LINUX '-I{STANZA_DIR}/include'-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-client.c' -o '{.}/lib/libstz-websockets-client.so'"
+      "cc -fPIC -rdynamic -shared -DPLATFORM_LINUX '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-client.c' -o '{.}/lib/libstz-websockets-client.so'"
     os-x :
       "mkdir -p '{.}/lib'"
       "cc -fPIC -rdynamic -shared -DPLATFORM_OS_X '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-client.c' -o '{.}/lib/libstz-websockets-client.dylib'"
