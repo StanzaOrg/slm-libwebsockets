@@ -2,28 +2,34 @@
 ; These compile instructions are for binary package build time.
 ; End-user slm packages will not have this include file.
 
-; compile simple-websockets-server.c into a shared library
+; compile simple-websockets-server.c into a static library
 compile flag "-lstz-websockets-server" :
   on-platform :
     linux :
       "mkdir -p '{.}/lib'"
-      "cc -fPIC -rdynamic -shared -DPLATFORM_LINUX '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-server.c' -o '{.}/lib/libstz-websockets-server.so'"
+      "cc -fPIC -c -DPLATFORM_LINUX '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '{.}/src/simple-ws-server.c' -o '{.}/lib/simple-ws-server.o'"
+      "ar rcs '{.}/lib/libstz-websockets-server.a' '{.}/lib/simple-ws-server.o'"
     os-x :
       "mkdir -p '{.}/lib'"
-      "cc -fPIC -rdynamic -shared -DPLATFORM_OS_X '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-server.c' -o '{.}/lib/libstz-websockets-server.dylib'"
+      "cc -fPIC -c -DPLATFORM_OS_X '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '{.}/src/simple-ws-server.c' -o '{.}/lib/simple-ws-server.o'"
+      "ar rcs '{.}/lib/libstz-websockets-server.a' '{.}/lib/simple-ws-server.o'"
     windows :
       "mkdir {.}\\lib"
-      "gcc -Wl,--export-all-symbols -shared -DPLATFORM_WINDOWS '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-server.c' -o '{.}/lib/libstz-websockets-server.dll'"
+      "gcc -c -DPLATFORM_WINDOWS '-I{STANZA_DIR}\\include' '-I{.}\\.slm\\deps\\libwebsockets\\include' '{.}\\src\\simple-ws-server.c' -o '{.}\\lib\\simple-ws-server.o'"
+      "ar rcs '{.}\\lib\\libstz-websockets-server.a' '{.}\\lib\\simple-ws-server.o'"
 
 ; compile simple-websockets-client.c into a shared library
 compile flag "-lstz-websockets-client" :
   on-platform :
     linux :
       "mkdir -p '{.}/lib'"
-      "cc -fPIC -rdynamic -shared -DPLATFORM_LINUX '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-client.c' -o '{.}/lib/libstz-websockets-client.so'"
+      "cc -fPIC -c -DPLATFORM_LINUX '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '{.}/src/simple-ws-client.c' -o '{.}/lib/simple-ws-client.o'"
+      "ar rcs '{.}/lib/libstz-websockets-client.a' '{.}/lib/simple-ws-client.o'"
     os-x :
       "mkdir -p '{.}/lib'"
-      "cc -fPIC -rdynamic -shared -DPLATFORM_OS_X '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-client.c' -o '{.}/lib/libstz-websockets-client.dylib'"
+      "cc -fPIC -c -DPLATFORM_OS_X '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '{.}/src/simple-ws-client.c' -o '{.}/lib/simple-ws-client.o'"
+      "ar rcs '{.}/lib/libstz-websockets-client.a' '{.}/lib/simple-ws-client.o'"
     windows :
       "mkdir {.}\\lib"
-      "gcc -Wl,--export-all-symbols -shared -DPLATFORM_WINDOWS '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-client.c' -o '{.}/lib/libstz-websockets-client.dll'"
+      "gcc -c -DPLATFORM_WINDOWS '-I{STANZA_DIR}\\include' '-I{.}\\.slm\\deps\\libwebsockets\\include' '{.}\\src\\simple-ws-client.c' -o '{.}\\lib\\simple-ws-client.o'"
+      "ar rcs '{.}\\lib\\libstz-websockets-client.a' '{.}\\lib\\simple-ws-client.o'"
