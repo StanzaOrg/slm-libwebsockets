@@ -8,11 +8,13 @@ package libwebsockets-server requires :
     (
       "-I{.}/.slm/deps/libwebsockets/include"
       "-L{.}/.slm/deps/libwebsockets/lib"
+      "-L{.}/.slm/deps/openssl/lib"
+      "-L{.}/.slm/deps/zlib/lib"
       "-L{.}/lib"
       "-lwebsockets"
       "-lstz-websockets-server"
       "-lssl" "-lcrypto"
-      "-Wl,-rpath,{.}/.slm/deps/libwebsockets/lib"
+      "-lz"
     )
 
 package libwebsockets-client defined-in "src/libwebsockets-client.stanza"
@@ -22,11 +24,13 @@ package libwebsockets-client requires :
     (
       "-I{.}/.slm/deps/libwebsockets/include"
       "-L{.}/.slm/deps/libwebsockets/lib"
+      "-L{.}/.slm/deps/openssl/lib"
+      "-L{.}/.slm/deps/zlib/lib"
       "-L{.}/lib"
       "-lwebsockets"
       "-lstz-websockets-client"
       "-lssl" "-lcrypto"
-      "-Wl,-rpath,{.}/.slm/deps/libwebsockets/lib"
+      "-lz"
     )
 
 ; This include file will only exist in the git repo at binary package build time.

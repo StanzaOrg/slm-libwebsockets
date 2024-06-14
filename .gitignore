@@ -2,4 +2,6 @@
 *.tgz
 lib/
 libwebsockets-tests
-
+/.conan2/
+/.conan2.cache/
+/venv/
