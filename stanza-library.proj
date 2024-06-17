@@ -7,15 +7,15 @@ compile flag "-lstz-websockets-server" :
   on-platform :
     linux :
       "mkdir -p '{.}/lib'"
-      "cc -fPIC -c -DPLATFORM_LINUX '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '{.}/src/simple-ws-server.c' -o '{.}/lib/simple-ws-server.o'"
+      "cc -fPIC -c -DPLATFORM_LINUX '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/openssl/include' '-I{.}/.slm/deps/libwebsockets/include' '{.}/src/simple-ws-server.c' -o '{.}/lib/simple-ws-server.o'"
       "ar rcs '{.}/lib/libstz-websockets-server.a' '{.}/lib/simple-ws-server.o'"
     os-x :
       "mkdir -p '{.}/lib'"
-      "cc -fPIC -c -DPLATFORM_OS_X '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '{.}/src/simple-ws-server.c' -o '{.}/lib/simple-ws-server.o'"
+      "cc -fPIC -c -DPLATFORM_OS_X '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/openssl/include' '-I{.}/.slm/deps/libwebsockets/include' '{.}/src/simple-ws-server.c' -o '{.}/lib/simple-ws-server.o'"
       "ar rcs '{.}/lib/libstz-websockets-server.a' '{.}/lib/simple-ws-server.o'"
     windows :
-      "mkdir {.}\\lib"
-      "gcc -c -DPLATFORM_WINDOWS '-I{STANZA_DIR}\\include' '-I{.}\\.slm\\deps\\libwebsockets\\include' '{.}\\src\\simple-ws-server.c' -o '{.}\\lib\\simple-ws-server.o'"
+      "bash -c 'mkdir -p \"{.}\\lib\"'"
+      "gcc -c -DPLATFORM_WINDOWS '-I{STANZA_DIR}\\include' '-I{.}/.slm/deps/openssl/include' '-I{.}\\.slm\\deps\\libwebsockets\\include' '{.}\\src\\simple-ws-server.c' -o '{.}\\lib\\simple-ws-server.o'"
       "ar rcs '{.}\\lib\\libstz-websockets-server.a' '{.}\\lib\\simple-ws-server.o'"
 
 ; compile simple-websockets-client.c into a shared library
@@ -23,13 +23,13 @@ compile flag "-lstz-websockets-client" :
   on-platform :
     linux :
       "mkdir -p '{.}/lib'"
-      "cc -fPIC -c -DPLATFORM_LINUX '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '{.}/src/simple-ws-client.c' -o '{.}/lib/simple-ws-client.o'"
+      "cc -fPIC -c -DPLATFORM_LINUX '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/openssl/include' '-I{.}/.slm/deps/libwebsockets/include' '{.}/src/simple-ws-client.c' -o '{.}/lib/simple-ws-client.o'"
       "ar rcs '{.}/lib/libstz-websockets-client.a' '{.}/lib/simple-ws-client.o'"
     os-x :
       "mkdir -p '{.}/lib'"
-      "cc -fPIC -c -DPLATFORM_OS_X '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '{.}/src/simple-ws-client.c' -o '{.}/lib/simple-ws-client.o'"
+      "cc -fPIC -c -DPLATFORM_OS_X '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/openssl/include' '-I{.}/.slm/deps/libwebsockets/include' '{.}/src/simple-ws-client.c' -o '{.}/lib/simple-ws-client.o'"
       "ar rcs '{.}/lib/libstz-websockets-client.a' '{.}/lib/simple-ws-client.o'"
     windows :
-      "mkdir {.}\\lib"
-      "gcc -c -DPLATFORM_WINDOWS '-I{STANZA_DIR}\\include' '-I{.}\\.slm\\deps\\libwebsockets\\include' '{.}\\src\\simple-ws-client.c' -o '{.}\\lib\\simple-ws-client.o'"
+      "bash -c 'mkdir -p \"{.}\\lib\"'"
+      "gcc -c -DPLATFORM_WINDOWS '-I{STANZA_DIR}\\include' '-I{.}/.slm/deps/openssl/include' '-I{.}\\.slm\\deps\\libwebsockets\\include' '{.}\\src\\simple-ws-client.c' -o '{.}\\lib\\simple-ws-client.o'"
       "ar rcs '{.}\\lib\\libstz-websockets-client.a' '{.}\\lib\\simple-ws-client.o'"

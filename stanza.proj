@@ -5,37 +5,53 @@ package libwebsockets-server defined-in "src/libwebsockets-server.stanza"
 package libwebsockets-server requires :
   ccfiles : "src/simple-ws-server.c"
   ccflags :
-    (
-      "-I{.}/.slm/deps/libwebsockets/include"
-      "-L{.}/.slm/deps/libwebsockets/lib"
-      "-L{.}/.slm/deps/openssl/lib"
-      "-L{.}/.slm/deps/zlib/lib"
-      "-L{.}/lib"
-      "-lwebsockets"
-      "-lstz-websockets-server"
-      "-lssl" "-lcrypto"
-      "-lz"
-    )
+    "-I{.}/.slm/deps/libwebsockets/include"
+    "-L{.}/.slm/deps/libwebsockets/lib"
+    "-I{.}/.slm/deps/openssl/include"
+    "-L{.}/.slm/deps/openssl/lib"
+    "-I{.}/.slm/deps/zlib/include"
+    "-L{.}/.slm/deps/zlib/lib"
+    "-L{.}/lib"
+    on-platform:
+      windows :
+        "-lwebsockets_static"
+      else :
+        "-lwebsockets"
+    "-lstz-websockets-server"
+    "-lssl" "-lcrypto"
+    "-lz"
     on-platform:
       linux :
         "-ldl"
+      windows :
+        "-lbcrypt" "-lcrypt32" "-lws2_32"
       else : ()
 
 package libwebsockets-client defined-in "src/libwebsockets-client.stanza"
 package libwebsockets-client requires :
   ccfiles : "src/simple-ws-client.c"
   ccflags :
-    (
-      "-I{.}/.slm/deps/libwebsockets/include"
-      "-L{.}/.slm/deps/libwebsockets/lib"
-      "-L{.}/.slm/deps/openssl/lib"
-      "-L{.}/.slm/deps/zlib/lib"
-      "-L{.}/lib"
-      "-lwebsockets"
-      "-lstz-websockets-client"
-      "-lssl" "-lcrypto"
-      "-lz"
-    )
+    "-I{.}/.slm/deps/libwebsockets/include"
+    "-L{.}/.slm/deps/libwebsockets/lib"
+    "-I{.}/.slm/deps/openssl/include"
+    "-L{.}/.slm/deps/openssl/lib"
+    "-I{.}/.slm/deps/zlib/include"
+    "-L{.}/.slm/deps/zlib/lib"
+    "-L{.}/lib"
+    on-platform:
+      windows :
+        "-lwebsockets_static"
+      else :
+        "-lwebsockets"
+    "-lstz-websockets-client"
+    "-lssl" "-lcrypto"
+    "-lz"
+    on-platform:
+      linux :
+        "-ldl"
+      windows :
+        "-lbcrypt" "-lcrypt32" "-lws2_32"
+      else : ()
 
 ; This include file will only exist in the git repo at binary package build time.
 ; End-user slm packages will not have this include file.
@@ -46,7 +62,7 @@ packages libwebsockets/* defined-in "src/libwebsockets"
 build main :
   inputs:
     libwebsockets-client
-    libwebsockets-server 
+    libwebsockets-server
   pkg: ".slm/pkgs"
 
 build test :
