@@ -16,6 +16,10 @@ package libwebsockets-server requires :
       "-lssl" "-lcrypto"
       "-lz"
     )
+    on-platform:
+      linux :
+        "-ldl"
+      else : ()
 
 package libwebsockets-client defined-in "src/libwebsockets-client.stanza"
 package libwebsockets-client requires :
