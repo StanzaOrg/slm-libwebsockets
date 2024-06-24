@@ -11,6 +11,8 @@ package libwebsockets-server requires :
     "-L{.}/.slm/deps/openssl/lib"
     "-I{.}/.slm/deps/zlib/include"
     "-L{.}/.slm/deps/zlib/lib"
+    "-I{.}/../libwbsockets/include"
+    "-L{.}/../libwbsockets/lib"
     "-L{.}/lib"
     on-platform:
       windows :
@@ -37,6 +39,8 @@ package libwebsockets-client requires :
     "-L{.}/.slm/deps/openssl/lib"
     "-I{.}/.slm/deps/zlib/include"
     "-L{.}/.slm/deps/zlib/lib"
+    "-I{.}/../libwbsockets/include"
+    "-L{.}/../libwbsockets/lib"
     "-L{.}/lib"
     on-platform:
       windows :
