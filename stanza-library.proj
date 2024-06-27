@@ -13,7 +13,7 @@ compile flag "-lstz-websockets-server" :
       "cc -fPIC -rdynamic -shared -DPLATFORM_OS_X '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-server.c' -o '{.}/lib/libstz-websockets-server.dylib'"
     windows :
       "mkdir {.}\\lib"
-      "gcc -Wl,--export-all-symbols -shared -DPLATFORM_WINDOWS '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-server.c' -o '{.}/lib/libstz-websockets-server.dll'"
+      "gcc -Wl,--export-all-symbols -shared -DPLATFORM_WINDOWS '-I{STANZA_DIR}\\include' '-I{.}\\.slm\\deps\\libwebsockets\\include' '-L{.}\\.slm\\deps\\libwebsockets\\lib' '-lwebsockets' '{.}\\src\\simple-ws-server.c' -o '{.}\\lib\\libstz-websockets-server.dll'"
 
 ; compile simple-websockets-client.c into a shared library
 compile flag "-lstz-websockets-client" :
@@ -26,4 +26,4 @@ compile flag "-lstz-websockets-client" :
       "cc -fPIC -rdynamic -shared -DPLATFORM_OS_X '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-client.c' -o '{.}/lib/libstz-websockets-client.dylib'"
     windows :
       "mkdir {.}\\lib"
-      "gcc -Wl,--export-all-symbols -shared -DPLATFORM_WINDOWS '-I{STANZA_DIR}/include' '-I{.}/.slm/deps/libwebsockets/include' '-L{.}/.slm/deps/libwebsockets/lib' '-lwebsockets' '{.}/src/simple-ws-client.c' -o '{.}/lib/libstz-websockets-client.dll'"
+      "gcc -Wl,--export-all-symbols -shared -DPLATFORM_WINDOWS '-I{STANZA_DIR}\\include' '-I{.}\\.slm\\deps\\libwebsockets\\include' '-L{.}\\.slm\\deps\\libwebsockets\\lib' '-lwebsockets' '{.}\\src\\simple-ws-client.c' -o '{.}\\lib\\libstz-websockets-client.dll'"
