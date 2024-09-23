@@ -7,6 +7,10 @@ package libwebsockets-server requires :
   ccflags :
     "-I{.}/.slm/deps/libwebsockets/include"
     "-L{.}/.slm/deps/libwebsockets/lib"
+    "-I{.}/.slm/deps/openssl/include"
+    "-L{.}/.slm/deps/openssl/lib"
+    "-I{.}/.slm/deps/zlib/include"
+    "-L{.}/.slm/deps/zlib/lib"
     "-I{.}/../libwebsockets/include"
     "-L{.}/../libwebsockets/lib"
     "-L{.}/lib"
@@ -16,6 +20,8 @@ package libwebsockets-server requires :
       else :
         "-lwebsockets"
     "-lstz-websockets-server"
+    "-lssl" "-lcrypto"
+    "-lz"
     on-platform:
       linux :
         "-ldl"
@@ -29,6 +35,10 @@ package libwebsockets-client requires :
   ccflags :
     "-I{.}/.slm/deps/libwebsockets/include"
     "-L{.}/.slm/deps/libwebsockets/lib"
+    "-I{.}/.slm/deps/openssl/include"
+    "-L{.}/.slm/deps/openssl/lib"
+    "-I{.}/.slm/deps/zlib/include"
+    "-L{.}/.slm/deps/zlib/lib"
     "-I{.}/../libwebsockets/include"
     "-L{.}/../libwebsockets/lib"
     "-L{.}/lib"
@@ -38,6 +48,8 @@ package libwebsockets-client requires :
       else :
         "-lwebsockets"
     "-lstz-websockets-client"
+    "-lssl" "-lcrypto"
+    "-lz"
     on-platform:
       linux :
         "-ldl"
