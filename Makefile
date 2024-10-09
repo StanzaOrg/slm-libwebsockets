@@ -21,7 +21,11 @@ build:
 	if [ "$$VIRTUAL_ENV" == "" ] ; then
 	    echo "creating python virtual environment in ./venv"
 	    ${PYTHON} -m venv venv
-	    source venv/bin/activate
+	    if [ -e "venv/Scripts/activate" ] ; then
+	        source "venv/Scripts/activate"
+	    else
+	        source "venv/bin/activate"
+	    fi
 	    pip install -r requirements.txt
 	fi
 
@@ -30,7 +34,6 @@ build:
 	${CONAN} config install conan-config
 	 #${CONAN} remote enable conancenter
 	[ ! -e ".conan2/profiles/default" ] && ${CONAN} profile detect
-	(cd conan_lbstanza_generator && ${CONAN} create .)
 
 	 # get the current project name from the slm.toml file
 	SLMPROJNAME=$$(${SED} -n -e '/^ *name *= *"*\([^"]*\).*/{s//\1/;p;q}' slm.toml)
