@@ -20,14 +20,14 @@ required_conan_version = ">=2.0"
 
 class ConanSlmPackage(ConanFile):
   package_type = "library"
-  python_requires = "lbstanzagenerator_pyreq/[>=0.1]"
+  python_requires = "lbstanzagenerator_pyreq/[>=0.6.17 <0.7.0]"
 
   # Binary configuration
   #settings = "os", "arch", "compiler", "build_type"
   settings = "os", "arch"
 
   options = {"shared": [True, False], "fPIC": [True, False]}
-  default_options = {"shared": True, "fPIC": True}
+  default_options = {"shared": True, "fPIC": True, "*/*:shared": True}
   implements = ["auto_shared_fpic"]
 
 
@@ -103,6 +103,7 @@ class ConanSlmPackage(ConanFile):
   # requirements(): Define the dependencies of the package
   def requirements(self):
     self.output.info("conanfile.py: requirements()")
+
     with open(f"{self.recipe_folder}/slm.toml", "rb") as f:
       deps = tomllib.load(f)["dependencies"]
 
@@ -122,12 +123,12 @@ class ConanSlmPackage(ConanFile):
     self.output.info("conanfile.py: build_requirements()")
   
     # use stanza provided by conan
-    self.tool_requires("lbstanza/[>=0.18.58]")
-    self.tool_requires("slm/[>=0.6.0]")
+    self.tool_requires("lbstanza/[>=0.18.94 <0.19.0]")
+    self.tool_requires("slm/[>=0.6.17 <0.7.0]")
     
     # use cmake and ninja provided by conan
     # necessary if compiling non-stanza dependencies
-    self.tool_requires("cmake/[>3.20]")
+    self.tool_requires("cmake/[>=3.27 <4.0]")
     self.tool_requires("ninja/[>1.11]")
   
     # use mingw-builds compiler provided by conan on windows
@@ -151,6 +152,7 @@ class ConanSlmPackage(ConanFile):
     self.run("stanza version", cwd=self.source_folder, scope="build")
     self.run("slm version", cwd=self.source_folder, scope="build")
     self.run("bash -c '[ ! -d .slm ] || slm clean'", cwd=self.source_folder, scope="build")
+    Path(os.path.join(self.source_folder, "build")).mkdir(parents=True, exist_ok=True)
     self.run("slm build -verbose -- -verbose", cwd=self.source_folder, scope="build")
 
     if not self.conf.get("tools.build:skip_test", default=False):
@@ -190,6 +192,15 @@ class ConanSlmPackage(ConanFile):
     copy2(os.path.join(self.source_folder, f"stanza-{outerlibname}-relative.proj"), os.path.join(self.package_folder, f"stanza-{outerlibname}.proj"))
     copy2(os.path.join(self.source_folder, "stanza.proj"), os.path.join(self.package_folder, "stanza.proj"))
     copytree(os.path.join(self.source_folder, "src"), os.path.join(self.package_folder, "src"))
+
+    # copy executable matching the library name (if any) from the build directory to /bin/
+    exe=os.path.join(self.source_folder, outerlibname)
+    if platform.system()=="Windows":
+        exe += ".exe"
+    if os.path.exists(exe):
+        pkgbindir = os.path.join(self.package_folder, "bin")
+        Path(pkgbindir).mkdir(parents=True, exist_ok=True)
+        copy2(exe, pkgbindir)
 
     # copy any libraries from the lib build directory to /lib/
     Path(os.path.join(self.package_folder, "lib")).mkdir(parents=True, exist_ok=True)
